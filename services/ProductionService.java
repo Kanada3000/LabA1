@@ -1,75 +1,72 @@
 package services;
 
-import other.Finance;
-import other.PaperMachine;
-import other.PaintMachine;
-import other.BanknoteMachine;
+import entities.Finance;
+import entities.PaperMachine;
+import entities.PaintMachine;
 
-public class ProductionService {
+import java.util.concurrent.TimeUnit;
 
-    public static void pause(int ms) {
-        try {
-            Thread.sleep(ms);
+import entities.BanknoteMachine;
 
-        } catch (InterruptedException e) {
-            System.err.format("IOException: %s%n", e);
-        }
-    }
+public final class ProductionService {
 
-    public void productionPaper(final PaperMachine paperMachine) {
-        if (Finance.getFund() >= paperMachine.getExpenses()) {
+    public void productionPaper(final PaperMachine paperMachine, final Finance finance) throws InterruptedException {
+        if (finance.getFund() >= paperMachine.getExpenses()) {
             System.out.printf("\n\nProduce paper...");
-            pause(1000);
+            TimeUnit.SECONDS.sleep(1);
             paperMachine.addVolume(paperMachine.getProductionSpeed());
-            Finance.subFund(paperMachine.getExpenses());
+            finance.subFund(paperMachine.getExpenses());
             System.out.printf("\nProduced %d papers. You spent $%d!", paperMachine.getProductionSpeed(),
                     paperMachine.getExpenses());
         } else
             System.out.printf("\nYou don't have enough funds!");
     }
 
-    public void productionPaper(final PaperMachine paperMachine, final int volume) {
+    public void productionPaper(final PaperMachine paperMachine, final int volume, final Finance finance)
+            throws InterruptedException {
         final int expenses = paperMachine.getExpenses() * volume / paperMachine.getProductionSpeed();
-        if (Finance.getFund() >= expenses) {
+        if (finance.getFund() >= expenses) {
             System.out.printf("\n\nProduce paper...");
-            pause(1000);
+            TimeUnit.SECONDS.sleep(1);
             paperMachine.addVolume(volume);
-            Finance.subFund(expenses);
+            finance.subFund(expenses);
             System.out.printf("\nProduced %d papers. You spent $%d!", volume, expenses);
         } else
             System.out.printf("\nYou don't have enough funds!");
     }
 
-    public void productionPaint(final PaintMachine paintMachine) {
-        if (Finance.getFund() >= paintMachine.getExpenses()) {
+    public void productionPaint(final PaintMachine paintMachine, final Finance finance) throws InterruptedException {
+        if (finance.getFund() >= paintMachine.getExpenses()) {
             System.out.printf("\n\nProduce paint...");
-            pause(1000);
+            TimeUnit.SECONDS.sleep(1);
             paintMachine.addVolume(paintMachine.getProductionSpeed());
-            Finance.subFund(paintMachine.getExpenses());
+            finance.subFund(paintMachine.getExpenses());
             System.out.printf("\nProduced %d paints. You spent $%d!", paintMachine.getProductionSpeed(),
                     paintMachine.getExpenses());
         } else
             System.out.printf("\nYou don't have enough funds!");
     }
 
-    public void productionPaint(PaintMachine paintMachine, final int volume) {
+    public void productionPaint(final PaintMachine paintMachine, final int volume, final Finance finance)
+            throws InterruptedException {
         final int expenses = paintMachine.getExpenses() * volume / paintMachine.getProductionSpeed();
-        if (Finance.getFund() >= expenses) {
+        if (finance.getFund() >= expenses) {
             System.out.printf("\n\nProduce paint...");
-            pause(1000);
+            TimeUnit.SECONDS.sleep(1);
             paintMachine.addVolume(volume);
-            Finance.subFund(expenses);
+            finance.subFund(expenses);
             System.out.printf("\nProduced %d paints. You spent $%d!", volume, expenses);
         } else
             System.out.printf("\nYou don't have enough funds!");
     }
 
-    public void printBanknote(BanknoteMachine banknoteMachine) {
+    public void printBanknote(final BanknoteMachine banknoteMachine, final Finance finance)
+            throws InterruptedException {
         if (banknoteMachine.getProductionSpeed() <= banknoteMachine.getAmountOfPaint()) {
             if (banknoteMachine.getProductionSpeed() <= banknoteMachine.getAmountOfPaper()) {
                 if (banknoteMachine.getWorking() == true) {
                     System.out.printf("\n\nPrinting banknote...");
-                    pause(1000);
+                    TimeUnit.SECONDS.sleep(1);
                     banknoteMachine.addVolume(banknoteMachine.getProductionSpeed());
                     banknoteMachine.subPaint(banknoteMachine.getProductionSpeed());
                     banknoteMachine.subPaper(banknoteMachine.getProductionSpeed());
@@ -82,12 +79,13 @@ public class ProductionService {
             System.out.printf("\nYou don't have enough paint!");
     }
 
-    public void printBanknote(BanknoteMachine banknoteMachine, int volume) {
+    public void printBanknote(final BanknoteMachine banknoteMachine, final int volume, final Finance finance)
+            throws InterruptedException {
         if (volume <= banknoteMachine.getAmountOfPaint()) {
             if (volume <= banknoteMachine.getAmountOfPaper()) {
                 if (banknoteMachine.getWorking() == true) {
                     System.out.printf("\n\nPrinting banknote...");
-                    pause(1000);
+                    TimeUnit.SECONDS.sleep(1);
                     banknoteMachine.addVolume(volume);
                     System.out.printf("\nProduced %d banknotes.", volume);
                 } else

@@ -1,48 +1,51 @@
 package services;
 
-import other.Repairer;
-import other.BanknoteMachine;
-import other.PaintMachine;
-import other.PaperMachine;
+import entities.Repairer;
 
-public class RepairService {
+import java.util.concurrent.TimeUnit;
 
-    public static void pause(int ms) {
-        try {
-            Thread.sleep(ms);
+import entities.BanknoteMachine;
+import entities.PaintMachine;
+import entities.PaperMachine;
 
-        } catch (InterruptedException e) {
-            System.err.format("IOException: %s%n", e);
-        }
-    }
+public final class RepairService {
 
-    public void repairPaperMachine(PaperMachine paperMachine, Repairer repairer) {
+    public void repairPaperMachine(final PaperMachine paperMachine, final Repairer repairer)
+            throws InterruptedException {
+
         if (paperMachine.getBreaking() > 0) {
             System.out.print("\n\nRepairing machine...");
-            pause(1000);
+            TimeUnit.SECONDS.sleep(1);
             paperMachine.setBreaking(0);
             System.out.print("\nPaper machine repaired by " + repairer.getName() + " " + repairer.getSurname());
         } else
             System.out.print("\n\nThe machine has already been repaired!");
+
     }
 
-    public void repairPaintMachine(PaintMachine paintMachine, Repairer repairer) {
+    public void repairPaintMachine(final PaintMachine paintMachine, final Repairer repairer)
+            throws InterruptedException {
+
         if (paintMachine.getBreaking() > 0) {
             System.out.print("\n\nRepairing machine...");
-            pause(1000);
+            TimeUnit.SECONDS.sleep(1);
             paintMachine.setBreaking(0);
             System.out.print("\nPaint machine repaired by " + repairer.getName() + " " + repairer.getSurname());
         } else
             System.out.print("\n\nThe machine has already been repaired!");
+
     }
 
-    public void repairBanknoteMachine(BanknoteMachine banknoteMachine, Repairer repairer) {
+    public void repairBanknoteMachine(final BanknoteMachine banknoteMachine, final Repairer repairer)
+            throws InterruptedException {
+
         if (banknoteMachine.getBreaking() > 0) {
             System.out.print("\n\nRepairing machine...");
-            pause(1000);
+            TimeUnit.SECONDS.sleep(1);
             banknoteMachine.setBreaking(0);
             System.out.print("\nBanknote machine repaired by " + repairer.getName() + " " + repairer.getSurname());
         } else
             System.out.print("\n\nThe machine has already been repaired!");
+            
     }
 }
