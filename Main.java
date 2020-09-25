@@ -1,34 +1,33 @@
 import services.*;
-import other.*;
+import entities.*;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(final String[] args) throws InterruptedException {
 
-        Finance.setFund(3000);
-        Finance.displayInfo();
+        final Finance finance = new Finance(3000);
+        finance.displayInfo();
         System.out.print("\n");
 
-        Worker worker1 = new Worker("James", "Sullivan", 3); // 3rd place - salary
-        Worker worker2 = new Worker("Katty", "Perry", 4);
-        Worker worker3 = new Worker("Jensen", "Ackles", 5);
-        Assistant assistant = new Assistant("Mike", "Wazowski", 2);
-        Repairer repairer = new Repairer("Randall", "Boggs", 3);
+        final Worker worker1 = new Worker("James", "Sullivan", 3, finance); // 3rd place - salary
+        final Worker worker2 = new Worker("Katty", "Perry", 4, finance);
+        final Worker worker3 = new Worker("Jensen", "Ackles", 5, finance);
+        final Assistant assistant = new Assistant("Mike", "Wazowski", 2, finance);
+        final Repairer repairer = new Repairer("Randall", "Boggs", 3, finance);
+        final PaintMachine paintMachine = new PaintMachine(2, 5, 450, worker1); // (int expenses, int productionSpeed,
+                                                                                // int maxVolume, Worker worker)
+        final PaperMachine paperMachine = new PaperMachine(1, 5, 300, worker2); // (int expenses, int productionSpeed,
+                                                                                // int maxVolume)
+        final BanknoteMachine banknoteMachine = new BanknoteMachine(10, 500, 5, worker3); // (int printSpeed, int
+                                                                                          // maxVolume, int earnings)
+                                                                                          
+        final ProductionService product = new ProductionService();
+        final DeliveryService delivery = new DeliveryService();
+        final RepairService repair = new RepairService();
 
-        PaintMachine paintMachine = new PaintMachine(2, 5, 450, worker1); // (int expenses, int productionSpeed, int
-                                                                          // maxVolume, Worker worker)
-        PaperMachine paperMachine = new PaperMachine(1, 5, 300, worker2); // (int expenses, int productionSpeed, int
-                                                                          // maxVolume)
-        BanknoteMachine banknoteMachine = new BanknoteMachine(10, 500, 5, worker3); // (int printSpeed, int maxVolume,
-                                                                                    // int earnings)
+        finance.displayInfo();
 
-        ProductionService product = new ProductionService();
-        DeliveryService delivery = new DeliveryService();
-        RepairService repair = new RepairService();
-
-        Finance.displayInfo();
-
-        product.productionPaper(paperMachine, 20);
-        product.productionPaint(paintMachine, 15);
+        product.productionPaper(paperMachine, 20, finance);
+        product.productionPaint(paintMachine, 15, finance);
 
         delivery.paperToBanknote(paperMachine, banknoteMachine, assistant);
         delivery.paintToBanknote(paintMachine, banknoteMachine, assistant);
@@ -37,13 +36,13 @@ public class Main {
         paintMachine.displayInfo();
         banknoteMachine.displayInfo();
 
-        product.printBanknote(banknoteMachine);
+        product.printBanknote(banknoteMachine, finance);
 
-        Finance.displayInfo();
+        finance.displayInfo();
 
-        delivery.banknoteToSell(banknoteMachine, assistant);
+        delivery.banknoteToSell(banknoteMachine, assistant, finance);
 
-        Finance.displayInfo();
+        finance.displayInfo();
 
         banknoteMachine.displayInfo();
 
